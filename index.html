@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="manifest.json">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#ffffff">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Elenia - Nutrition Tracker</title>
@@ -16,27 +15,207 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --bg-primary: linear-gradient(135deg, #009b3a 0%, #ffd700 100%);
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f8f9fa;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --border-color: #dee2e6;
+            --card-bg: #ffffff;
+            --input-bg: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: linear-gradient(135deg, #006b28 0%, #ccaa00 100%);
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #2d2d2d;
+            --text-primary: #e9ecef;
+            --text-secondary: #adb5bd;
+            --border-color: #495057;
+            --card-bg: #2d2d2d;
+            --input-bg: #212529;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #009b3a 0%, #ffd700 100%);
+            background: var(--bg-primary);
             min-height: 100vh;
             padding: 20px;
+            transition: background 0.3s ease;
+        }
+
+        [data-theme="dark"] body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
         }
 
         .container {
             max-width: 428px;
             margin: 0 auto;
-            background: white;
+            background: var(--bg-secondary);
             border-radius: 24px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             overflow: hidden;
+            transition: background 0.3s ease;
         }
 
         .header {
-            background: linear-gradient(135deg, #009b3a 0%, #ffd700 100%);
+            background: var(--bg-primary);
             color: white;
             padding: 30px 20px;
             text-align: center;
+            position: relative;
+            transition: background 0.3s ease;
+        }
+
+        .settings-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .settings-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .settings-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .settings-content {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .settings-section {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .settings-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .setting-item {
+            margin-bottom: 16px;
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .toggle-label input[type="checkbox"] {
+            display: none;
+        }
+
+        .toggle-slider {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: var(--border-color);
+            border-radius: 13px;
+            transition: background 0.3s;
+        }
+
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: white;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+
+        .toggle-label input[type="checkbox"]:checked + .toggle-slider {
+            background: #009b3a;
+        }
+
+        .toggle-label input[type="checkbox"]:checked + .toggle-slider::before {
+            transform: translateX(24px);
+        }
+
+        .settings-btn {
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .settings-btn:hover {
+            background: var(--bg-primary);
+            color: white;
+            border-color: transparent;
+        }
+
+        .settings-btn.danger {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border-color: rgba(220, 53, 69, 0.3);
+        }
+
+        .settings-btn.danger:hover {
+            background: #dc3545;
+            color: white;
+        }
+
+        .footer-message {
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-style: italic;
+            background: var(--bg-tertiary);
+            border-radius: 0 0 24px 24px;
+            margin-top: -1px;
+        }
+
+        [data-theme="dark"] .footer-message {
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .header h1 {
@@ -49,29 +228,88 @@
             font-size: 14px;
         }
 
-        .tabs {
+        .tabs-dock {
             display: flex;
-            background: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
+            justify-content: center;
+            align-items: flex-end;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 16px 8px 12px 8px;
+            border-bottom: 1px solid rgba(0, 155, 58, 0.2);
+            gap: 8px;
+            height: 100px;
         }
 
-        .tab {
-            flex: 1;
-            padding: 16px;
-            text-align: center;
-            background: none;
-            border: none;
+        .tab-dock {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            background: rgba(0, 155, 58, 0.05);
+            border: 2px solid transparent;
+            padding: 8px 12px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            color: #6c757d;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 12px;
+            min-width: 70px;
+            transform-origin: bottom center;
+            position: relative;
         }
 
-        .tab.active {
+        .tab-dock:hover {
+            background: rgba(0, 155, 58, 0.1);
+            border-color: rgba(0, 155, 58, 0.3);
+            transform: translateY(-8px) scale(1.15);
+            box-shadow: 0 8px 16px rgba(0, 155, 58, 0.2);
+        }
+
+        .tab-dock.active {
+            background: linear-gradient(135deg, rgba(0, 155, 58, 0.15) 0%, rgba(255, 215, 0, 0.15) 100%);
+            border-color: #009b3a;
+            transform: translateY(-4px) scale(1.05);
+        }
+
+        .tab-dock.active:hover {
+            transform: translateY(-10px) scale(1.2);
+        }
+
+        .tab-icon {
+            font-size: 32px;
+            margin-bottom: 4px;
+            transition: font-size 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .tab-dock:hover .tab-icon {
+            font-size: 42px;
+        }
+
+        .tab-dock.active .tab-icon {
+            font-size: 36px;
+        }
+
+        .tab-dock.active:hover .tab-icon {
+            font-size: 46px;
+        }
+
+        .tab-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #495057;
+            text-align: center;
+            opacity: 0.7;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab-dock:hover .tab-label {
+            opacity: 1;
+            font-size: 12px;
             color: #009b3a;
-            background: white;
-            border-bottom: 3px solid #009b3a;
+        }
+
+        .tab-dock.active .tab-label {
+            color: #009b3a;
+            opacity: 1;
         }
 
         .content {
@@ -428,20 +666,114 @@
         <div class="header">
             <h1>🍃 Elenia</h1>
             <p>Track your nutrition goals</p>
+            <button onclick="toggleSettings()" class="settings-icon" title="Settings">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M12 1v6m0 6v6m0-18a2 2 0 0 1 2 2v.5a2 2 0 0 0 1 1.732l.5.289a2 2 0 0 0 2.732-1l.289-.5A2 2 0 0 1 21 7.268M12 1a2 2 0 0 0-2 2v.5a2 2 0 0 1-1 1.732l-.5.289a2 2 0 0 1-2.732-1l-.289-.5A2 2 0 0 0 3 7.268"/>
+                </svg>
+            </button>
         </div>
 
-        <div class="tabs">
-            <button class="tab active" onclick="switchTab(event, 'log')">Log Food</button>
-            <button class="tab" onclick="switchTab(event, 'calendar')">Calendar</button>
-            <button class="tab" onclick="switchTab(event, 'stats')">Statistics</button>
-            <button class="tab" onclick="switchTab(event, 'goals')">Goals</button>
+        <!-- Settings Modal -->
+        <div id="settingsModal" class="settings-modal" style="display: none;">
+            <div class="settings-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="font-size: 20px; margin: 0;">⚙️ Settings</h2>
+                    <button onclick="toggleSettings()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: inherit;">×</button>
+                </div>
+
+                <div class="settings-section">
+                    <h3 style="font-size: 16px; margin-bottom: 12px;">Appearance</h3>
+                    <div class="setting-item">
+                        <label class="toggle-label">
+                            <span>Dark Mode</span>
+                            <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3 style="font-size: 16px; margin-bottom: 12px;">Units</h3>
+                    <div class="setting-item">
+                        <label style="display: block; font-size: 14px; margin-bottom: 4px;">Weight Unit</label>
+                        <select id="weightUnit" onchange="saveSettings()" style="width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--bg-secondary); color: var(--text-primary);">
+                            <option value="lbs">Pounds (lbs)</option>
+                            <option value="kg">Kilograms (kg)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3 style="font-size: 16px; margin-bottom: 12px;">Data</h3>
+                    <button onclick="exportData()" class="settings-btn" style="width: 100%; margin-bottom: 8px;">
+                        📥 Export All Data
+                    </button>
+                    <button onclick="importData()" class="settings-btn" style="width: 100%; margin-bottom: 8px;">
+                        📤 Import Data
+                    </button>
+                    <button onclick="clearAllData()" class="settings-btn danger" style="width: 100%;">
+                        🗑️ Clear All Data
+                    </button>
+                </div>
+
+                <div class="settings-section">
+                    <h3 style="font-size: 16px; margin-bottom: 12px;">About</h3>
+                    <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 8px;">Elenia Nutrition Tracker</p>
+                    <p style="font-size: 12px; color: var(--text-secondary);">Version 1.0</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs-dock">
+            <button class="tab-dock" data-tab="plans" onclick="switchTab(event, 'plans')" onmousemove="magnifyTab(event)" onmouseleave="resetTab(event)">
+                <div class="tab-icon">📋</div>
+                <div class="tab-label">Meal Plans</div>
+            </button>
+            <button class="tab-dock" data-tab="calendar" onclick="switchTab(event, 'calendar')" onmousemove="magnifyTab(event)" onmouseleave="resetTab(event)">
+                <div class="tab-icon">📅</div>
+                <div class="tab-label">Calendar</div>
+            </button>
+            <button class="tab-dock active" data-tab="log" onclick="switchTab(event, 'log')" onmousemove="magnifyTab(event)" onmouseleave="resetTab(event)">
+                <div class="tab-icon">🍽️</div>
+                <div class="tab-label">Log Food</div>
+            </button>
+            <button class="tab-dock" data-tab="stats" onclick="switchTab(event, 'stats')" onmousemove="magnifyTab(event)" onmouseleave="resetTab(event)">
+                <div class="tab-icon">📊</div>
+                <div class="tab-label">Statistics</div>
+            </button>
+            <button class="tab-dock" data-tab="goals" onclick="switchTab(event, 'goals')" onmousemove="magnifyTab(event)" onmouseleave="resetTab(event)">
+                <div class="tab-icon">🎯</div>
+                <div class="tab-label">Goals</div>
+            </button>
         </div>
 
         <div class="content">
             <!-- Log Food Tab -->
             <div id="log" class="tab-content active">
                 <div class="food-entry">
-                    <h3>Create Meal</h3>
+                    <h3>📸 Snap Your Meal</h3>
+                    <p style="font-size: 13px; color: #6c757d; margin-bottom: 12px;">Take a photo and AI will identify foods and estimate portions</p>
+                    <input type="file" id="foodPhoto" accept="image/*" capture="environment" style="display: none;" onchange="analyzeFoodPhoto(event)">
+                    <button onclick="document.getElementById('foodPhoto').click()" class="btn btn-primary" style="margin-bottom: 8px;">
+                        📷 Take Photo / Upload Image
+                    </button>
+                    <div id="photoPreview" style="display: none; margin-top: 12px;">
+                        <img id="previewImage" style="width: 100%; border-radius: 8px; margin-bottom: 12px;">
+                        <div id="analysisLoading" style="display: none; text-align: center; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                            <div style="font-size: 24px; margin-bottom: 8px;">🔍</div>
+                            <p style="color: #6c757d;">Analyzing your food...</p>
+                        </div>
+                        <div id="analysisResults" style="display: none; background: #f8f9fa; padding: 12px; border-radius: 8px;">
+                            <h4 style="font-size: 14px; margin-bottom: 8px;">Detected Foods:</h4>
+                            <div id="detectedFoods"></div>
+                            <button onclick="addDetectedFoods()" class="btn btn-primary" style="margin-top: 12px;">Add All to Meal</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="food-entry">
+                    <h3>🔍 Search Food Database</h3>
                     <div class="input-group">
                         <label>Meal Name (optional)</label>
                         <input type="text" id="mealName" placeholder="e.g., Breakfast, Lunch, Post-Workout">
@@ -524,6 +856,63 @@
                 </div>
             </div>
 
+            <!-- Meal Plans Tab -->
+            <div id="plans" class="tab-content">
+                <div style="background: linear-gradient(135deg, #009b3a 0%, #ffd700 100%); color: white; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+                    <h2 style="font-size: 18px; margin-bottom: 8px;">🗓️ Meal Planning</h2>
+                    <p style="font-size: 13px; opacity: 0.9;">Create meal templates and schedule them for multiple days</p>
+                </div>
+
+                <!-- Saved Meal Templates -->
+                <div style="background: #f8f9fa; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <h3 style="font-size: 16px;">📋 My Meal Templates</h3>
+                        <button onclick="showCreateTemplate()" style="background: #009b3a; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 600;">+ New Template</button>
+                    </div>
+                    <div id="mealTemplatesList">
+                        <p style="font-size: 13px; color: #6c757d; text-align: center; padding: 20px;">No meal templates yet. Create one to get started!</p>
+                    </div>
+                </div>
+
+                <!-- Create/Edit Template -->
+                <div id="templateBuilder" style="display: none; background: #f8f9fa; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+                    <h3 style="font-size: 16px; margin-bottom: 12px;">Create Meal Template</h3>
+                    <div style="margin-bottom: 12px;">
+                        <label style="display: block; font-size: 12px; color: #6c757d; margin-bottom: 4px; font-weight: 600;">Template Name</label>
+                        <input type="text" id="templateName" placeholder="e.g., My Go-To Breakfast" style="width: 100%; padding: 10px; border: 1px solid #dee2e6; border-radius: 8px; font-size: 14px;">
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <label style="display: block; font-size: 12px; color: #6c757d; margin-bottom: 4px; font-weight: 600;">Meal Type</label>
+                        <select id="templateMealType" style="width: 100%; padding: 10px; border: 1px solid #dee2e6; border-radius: 8px; font-size: 14px; background: white;">
+                            <option value="Breakfast">Breakfast</option>
+                            <option value="Lunch">Lunch</option>
+                            <option value="Dinner">Dinner</option>
+                            <option value="Snack">Snack</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <label style="display: block; font-size: 12px; color: #6c757d; margin-bottom: 8px; font-weight: 600;">Add Foods to Template</label>
+                        <input type="text" id="templateFoodSearch" placeholder="Search foods..." oninput="searchFoodForTemplate()" style="width: 100%; padding: 10px; border: 1px solid #dee2e6; border-radius: 8px; font-size: 14px; margin-bottom: 8px;">
+                        <div id="templateSearchResults" style="display: none; max-height: 150px; overflow-y: auto; background: white; border: 1px solid #dee2e6; border-radius: 8px; margin-bottom: 8px;"></div>
+                        <div id="templateFoodsList" style="background: white; padding: 12px; border-radius: 8px; min-height: 60px;">
+                            <p style="font-size: 12px; color: #6c757d; text-align: center;">No foods added yet</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="saveTemplate()" class="btn btn-primary" style="flex: 1;">Save Template</button>
+                        <button onclick="cancelTemplate()" class="btn" style="flex: 1; background: #6c757d; color: white;">Cancel</button>
+                    </div>
+                </div>
+
+                <!-- Schedule Meals -->
+                <div style="background: #f8f9fa; padding: 16px; border-radius: 12px;">
+                    <h3 style="font-size: 16px; margin-bottom: 12px;">📅 Schedule Meals</h3>
+                    <div id="scheduleInterface">
+                        <p style="font-size: 13px; color: #6c757d; text-align: center; padding: 20px;">Create a meal template first, then schedule it for specific days</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Calendar Tab -->
             <div id="calendar" class="tab-content">
                 <div style="background: #f8f9fa; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
@@ -600,6 +989,80 @@
                 <div class="chart-container">
                     <h3>Daily Progress</h3>
                     <canvas id="barChart"></canvas>
+                </div>
+
+                <!-- Benchmarks & Comparisons -->
+                <div style="background: #f8f9fa; padding: 16px; border-radius: 12px; margin-top: 20px;">
+                    <h3 style="font-size: 18px; margin-bottom: 16px; color: #495057;">📊 How You Compare</h3>
+                    
+                    <div id="benchmarkComparison" style="background: white; padding: 14px; border-radius: 8px; margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; margin-bottom: 12px; color: #009b3a;">Your Profile vs. Average Person</h4>
+                        <div id="benchmarkContent">
+                            <p style="font-size: 13px; color: #6c757d; text-align: center; padding: 20px;">
+                                Add your body stats in the Goals tab to see personalized comparisons
+                            </p>
+                        </div>
+                    </div>
+
+                    <button onclick="toggleDietExamples()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #009b3a 0%, #ffd700 100%); color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; margin-bottom: 12px;">
+                        📋 View Popular Diet Examples
+                    </button>
+
+                    <div id="dietExamples" style="display: none;">
+                        <div style="background: white; padding: 14px; border-radius: 8px; margin-bottom: 12px;">
+                            <h4 style="font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                                🏋️ High Protein (Muscle Building)
+                                <button onclick="applyDietTemplate('highprotein')" style="margin-left: auto; background: #009b3a; color: white; border: none; padding: 4px 12px; border-radius: 6px; font-size: 11px; cursor: pointer;">Apply</button>
+                            </h4>
+                            <p style="font-size: 12px; color: #6c757d; margin-bottom: 6px;">For athletes & muscle gain</p>
+                            <p style="font-size: 13px;"><strong>Calories:</strong> 2500 | <strong>Protein:</strong> 200g (32%) | <strong>Carbs:</strong> 250g (40%) | <strong>Fats:</strong> 78g (28%)</p>
+                        </div>
+
+                        <div style="background: white; padding: 14px; border-radius: 8px; margin-bottom: 12px;">
+                            <h4 style="font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                                ⚖️ Balanced (Maintenance)
+                                <button onclick="applyDietTemplate('balanced')" style="margin-left: auto; background: #009b3a; color: white; border: none; padding: 4px 12px; border-radius: 6px; font-size: 11px; cursor: pointer;">Apply</button>
+                            </h4>
+                            <p style="font-size: 12px; color: #6c757d; margin-bottom: 6px;">Standard healthy eating</p>
+                            <p style="font-size: 13px;"><strong>Calories:</strong> 2000 | <strong>Protein:</strong> 100g (20%) | <strong>Carbs:</strong> 250g (50%) | <strong>Fats:</strong> 67g (30%)</p>
+                        </div>
+
+                        <div style="background: white; padding: 14px; border-radius: 8px; margin-bottom: 12px;">
+                            <h4 style="font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                                🔥 Low Carb (Keto-ish)
+                                <button onclick="applyDietTemplate('lowcarb')" style="margin-left: auto; background: #009b3a; color: white; border: none; padding: 4px 12px; border-radius: 6px; font-size: 11px; cursor: pointer;">Apply</button>
+                            </h4>
+                            <p style="font-size: 12px; color: #6c757d; margin-bottom: 6px;">For fat loss & low carb diets</p>
+                            <p style="font-size: 13px;"><strong>Calories:</strong> 1800 | <strong>Protein:</strong> 135g (30%) | <strong>Carbs:</strong> 90g (20%) | <strong>Fats:</strong> 100g (50%)</p>
+                        </div>
+
+                        <div style="background: white; padding: 14px; border-radius: 8px; margin-bottom: 12px;">
+                            <h4 style="font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                                🥗 Moderate Deficit (Weight Loss)
+                                <button onclick="applyDietTemplate('deficit')" style="margin-left: auto; background: #009b3a; color: white; border: none; padding: 4px 12px; border-radius: 6px; font-size: 11px; cursor: pointer;">Apply</button>
+                            </h4>
+                            <p style="font-size: 12px; color: #6c757d; margin-bottom: 6px;">Sustainable fat loss</p>
+                            <p style="font-size: 13px;"><strong>Calories:</strong> 1600 | <strong>Protein:</strong> 140g (35%) | <strong>Carbs:</strong> 160g (40%) | <strong>Fats:</strong> 44g (25%)</p>
+                        </div>
+
+                        <div style="background: white; padding: 14px; border-radius: 8px; margin-bottom: 12px;">
+                            <h4 style="font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                                💪 Lean Bulk (Clean Surplus)
+                                <button onclick="applyDietTemplate('leanbulk')" style="margin-left: auto; background: #009b3a; color: white; border: none; padding: 4px 12px; border-radius: 6px; font-size: 11px; cursor: pointer;">Apply</button>
+                            </h4>
+                            <p style="font-size: 12px; color: #6c757d; margin-bottom: 6px;">Muscle gain with minimal fat</p>
+                            <p style="font-size: 13px;"><strong>Calories:</strong> 2800 | <strong>Protein:</strong> 175g (25%) | <strong>Carbs:</strong> 350g (50%) | <strong>Fats:</strong> 78g (25%)</p>
+                        </div>
+
+                        <div style="background: white; padding: 14px; border-radius: 8px;">
+                            <h4 style="font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                                🏃 Endurance Athlete
+                                <button onclick="applyDietTemplate('endurance')" style="margin-left: auto; background: #009b3a; color: white; border: none; padding: 4px 12px; border-radius: 6px; font-size: 11px; cursor: pointer;">Apply</button>
+                            </h4>
+                            <p style="font-size: 12px; color: #6c757d; margin-bottom: 6px;">High carb for runners/cyclists</p>
+                            <p style="font-size: 13px;"><strong>Calories:</strong> 3000 | <strong>Protein:</strong> 150g (20%) | <strong>Carbs:</strong> 450g (60%) | <strong>Fats:</strong> 67g (20%)</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -744,6 +1207,10 @@
                 </div>
             </div>
         </div>
+        
+        <div class="footer-message">
+            I love you my elena - c
+        </div>
     </div>
 
     <script>
@@ -758,6 +1225,9 @@
         let selectedDate = null;
         let viewingMonth = new Date();
         let calendarView = 'month'; // 'month', 'week', or 'day'
+        let detectedFoodsFromPhoto = [];
+        let mealTemplates = [];
+        let currentTemplateBuilder = [];
         
         // Data structure: { "YYYY-MM-DD": [foods...] }
         let foodsByDate = {};
@@ -766,19 +1236,28 @@
         const foodDatabase = [
             // Proteins
             { name: "Chicken Breast (raw)", calories: 165, protein: 31, carbs: 0, fats: 3.6, category: "Protein" },
+            { name: "Chicken Breast (grilled)", calories: 165, protein: 31, carbs: 0, fats: 3.6, category: "Protein" },
             { name: "Chicken Thigh (raw)", calories: 209, protein: 26, carbs: 0, fats: 11, category: "Protein" },
+            { name: "Chicken Wings", calories: 203, protein: 30, carbs: 0, fats: 8.1, category: "Protein" },
             { name: "Ground Beef (80/20)", calories: 254, protein: 17, carbs: 0, fats: 20, category: "Protein" },
             { name: "Ground Beef (90/10)", calories: 176, protein: 20, carbs: 0, fats: 10, category: "Protein" },
+            { name: "Steak (Sirloin)", calories: 271, protein: 25, carbs: 0, fats: 18, category: "Protein" },
+            { name: "Bacon", calories: 541, protein: 37, carbs: 1.4, fats: 42, category: "Protein" },
+            { name: "Sausage (Pork)", calories: 301, protein: 12, carbs: 1.2, fats: 28, category: "Protein" },
             { name: "Salmon (raw)", calories: 208, protein: 20, carbs: 0, fats: 13, category: "Protein" },
             { name: "Tuna (canned in water)", calories: 116, protein: 26, carbs: 0, fats: 0.8, category: "Protein" },
+            { name: "Tilapia", calories: 128, protein: 26, carbs: 0, fats: 2.7, category: "Protein" },
+            { name: "Shrimp (raw)", calories: 85, protein: 20, carbs: 0, fats: 0.5, category: "Protein" },
             { name: "Eggs (whole)", calories: 143, protein: 13, carbs: 0.7, fats: 10, category: "Protein" },
             { name: "Egg Whites", calories: 52, protein: 11, carbs: 0.7, fats: 0.2, category: "Protein" },
             { name: "Greek Yogurt (plain, nonfat)", calories: 59, protein: 10, carbs: 3.6, fats: 0.4, category: "Protein" },
             { name: "Cottage Cheese (low-fat)", calories: 72, protein: 12, carbs: 4.3, fats: 1, category: "Protein" },
             { name: "Tofu (firm)", calories: 144, protein: 17, carbs: 3, fats: 9, category: "Protein" },
-            { name: "Shrimp (raw)", calories: 85, protein: 20, carbs: 0, fats: 0.5, category: "Protein" },
             { name: "Turkey Breast (raw)", calories: 135, protein: 30, carbs: 0, fats: 0.7, category: "Protein" },
             { name: "Pork Tenderloin (raw)", calories: 143, protein: 26, carbs: 0, fats: 3.5, category: "Protein" },
+            { name: "Deli Turkey", calories: 104, protein: 19, carbs: 3.7, fats: 1.7, category: "Protein" },
+            { name: "Deli Ham", calories: 145, protein: 21, carbs: 1.5, fats: 6, category: "Protein" },
+            { name: "Protein Powder (whey)", calories: 400, protein: 80, carbs: 7, fats: 5, category: "Protein" },
             
             // Carbs
             { name: "White Rice (cooked)", calories: 130, protein: 2.7, carbs: 28, fats: 0.3, category: "Carbs" },
@@ -790,9 +1269,25 @@
             { name: "Pasta (cooked)", calories: 131, protein: 5, carbs: 25, fats: 1.1, category: "Carbs" },
             { name: "Sweet Potato (baked)", calories: 90, protein: 2, carbs: 21, fats: 0.2, category: "Carbs" },
             { name: "White Potato (baked)", calories: 93, protein: 2.5, carbs: 21, fats: 0.1, category: "Carbs" },
-            { name: "Banana", calories: 89, protein: 1.1, carbs: 23, fats: 0.3, category: "Carbs" },
-            { name: "Apple", calories: 52, protein: 0.3, carbs: 14, fats: 0.2, category: "Carbs" },
-            { name: "Orange", calories: 47, protein: 0.9, carbs: 12, fats: 0.1, category: "Carbs" },
+            { name: "Tortilla (flour)", calories: 312, protein: 8.2, carbs: 51, fats: 7.7, category: "Carbs" },
+            { name: "Bagel", calories: 257, protein: 10, carbs: 50, fats: 1.7, category: "Carbs" },
+            { name: "English Muffin", calories: 234, protein: 7.6, carbs: 46, fats: 2, category: "Carbs" },
+            { name: "Pancakes", calories: 227, protein: 6.4, carbs: 28, fats: 9.7, category: "Carbs" },
+            { name: "Waffles", calories: 291, protein: 7.3, carbs: 38, fats: 12, category: "Carbs" },
+            { name: "Cereal (Cheerios)", calories: 367, protein: 11, carbs: 69, fats: 6.7, category: "Carbs" },
+            { name: "Granola", calories: 471, protein: 13, carbs: 64, fats: 18, category: "Carbs" },
+            
+            // Fruits
+            { name: "Banana", calories: 89, protein: 1.1, carbs: 23, fats: 0.3, category: "Fruits" },
+            { name: "Apple", calories: 52, protein: 0.3, carbs: 14, fats: 0.2, category: "Fruits" },
+            { name: "Orange", calories: 47, protein: 0.9, carbs: 12, fats: 0.1, category: "Fruits" },
+            { name: "Strawberries", calories: 32, protein: 0.7, carbs: 7.7, fats: 0.3, category: "Fruits" },
+            { name: "Blueberries", calories: 57, protein: 0.7, carbs: 14, fats: 0.3, category: "Fruits" },
+            { name: "Grapes", calories: 69, protein: 0.7, carbs: 18, fats: 0.2, category: "Fruits" },
+            { name: "Watermelon", calories: 30, protein: 0.6, carbs: 7.6, fats: 0.2, category: "Fruits" },
+            { name: "Pineapple", calories: 50, protein: 0.5, carbs: 13, fats: 0.1, category: "Fruits" },
+            { name: "Mango", calories: 60, protein: 0.8, carbs: 15, fats: 0.4, category: "Fruits" },
+            { name: "Peach", calories: 39, protein: 0.9, carbs: 9.5, fats: 0.3, category: "Fruits" },
             
             // Vegetables
             { name: "Broccoli (raw)", calories: 34, protein: 2.8, carbs: 7, fats: 0.4, category: "Vegetables" },
@@ -803,25 +1298,314 @@
             { name: "Bell Pepper (raw)", calories: 31, protein: 1, carbs: 6, fats: 0.3, category: "Vegetables" },
             { name: "Lettuce (raw)", calories: 15, protein: 1.4, carbs: 2.9, fats: 0.2, category: "Vegetables" },
             { name: "Asparagus (raw)", calories: 20, protein: 2.2, carbs: 3.9, fats: 0.1, category: "Vegetables" },
+            { name: "Cauliflower", calories: 25, protein: 1.9, carbs: 5, fats: 0.3, category: "Vegetables" },
+            { name: "Green Beans", calories: 31, protein: 1.8, carbs: 7, fats: 0.2, category: "Vegetables" },
+            { name: "Zucchini", calories: 17, protein: 1.2, carbs: 3.1, fats: 0.3, category: "Vegetables" },
+            { name: "Mushrooms", calories: 22, protein: 3.1, carbs: 3.3, fats: 0.3, category: "Vegetables" },
+            { name: "Onion", calories: 40, protein: 1.1, carbs: 9.3, fats: 0.1, category: "Vegetables" },
             
-            // Fats/Oils
+            // Fats/Oils/Nuts
             { name: "Almonds", calories: 579, protein: 21, carbs: 22, fats: 50, category: "Fats" },
+            { name: "Peanuts", calories: 567, protein: 26, carbs: 16, fats: 49, category: "Fats" },
+            { name: "Cashews", calories: 553, protein: 18, carbs: 30, fats: 44, category: "Fats" },
+            { name: "Walnuts", calories: 654, protein: 15, carbs: 14, fats: 65, category: "Fats" },
             { name: "Peanut Butter", calories: 588, protein: 25, carbs: 20, fats: 50, category: "Fats" },
+            { name: "Almond Butter", calories: 614, protein: 21, carbs: 19, fats: 56, category: "Fats" },
             { name: "Avocado", calories: 160, protein: 2, carbs: 9, fats: 15, category: "Fats" },
             { name: "Olive Oil", calories: 884, protein: 0, carbs: 0, fats: 100, category: "Fats" },
             { name: "Butter", calories: 717, protein: 0.9, carbs: 0.1, fats: 81, category: "Fats" },
             { name: "Cheese (Cheddar)", calories: 403, protein: 25, carbs: 1.3, fats: 33, category: "Fats" },
-            { name: "Walnuts", calories: 654, protein: 15, carbs: 14, fats: 65, category: "Fats" },
+            { name: "Cheese (Mozzarella)", calories: 280, protein: 28, carbs: 2.2, fats: 17, category: "Fats" },
+            { name: "Cream Cheese", calories: 342, protein: 5.9, carbs: 5.5, fats: 34, category: "Fats" },
             
             // Dairy
             { name: "Whole Milk", calories: 61, protein: 3.2, carbs: 4.8, fats: 3.3, category: "Dairy" },
             { name: "Skim Milk", calories: 34, protein: 3.4, carbs: 5, fats: 0.1, category: "Dairy" },
+            { name: "Almond Milk (unsweetened)", calories: 13, protein: 0.4, carbs: 0.3, fats: 1.1, category: "Dairy" },
             { name: "Yogurt (plain, whole milk)", calories: 61, protein: 3.5, carbs: 4.7, fats: 3.3, category: "Dairy" },
+            { name: "Sour Cream", calories: 193, protein: 2.4, carbs: 4.6, fats: 19, category: "Dairy" },
             
-            // Common prepared foods
-            { name: "Pizza (cheese)", calories: 266, protein: 11, carbs: 33, fats: 10, category: "Prepared" },
-            { name: "Hamburger (fast food)", calories: 295, protein: 17, carbs: 24, fats: 14, category: "Prepared" },
-            { name: "French Fries", calories: 312, protein: 3.4, carbs: 41, fats: 15, category: "Prepared" },
+            // Fast Food - McDonald's
+            { name: "Big Mac", calories: 257, protein: 13, carbs: 20, fats: 14, category: "Fast Food" },
+            { name: "Quarter Pounder", calories: 244, protein: 14, carbs: 21, fats: 12, category: "Fast Food" },
+            { name: "McNuggets (6pc)", calories: 287, protein: 16, carbs: 18, fats: 17, category: "Fast Food" },
+            { name: "McChicken", calories: 358, protein: 14, carbs: 40, fats: 16, category: "Fast Food" },
+            { name: "Filet-O-Fish", calories: 323, protein: 15, carbs: 36, fats: 13, category: "Fast Food" },
+            { name: "French Fries (medium)", calories: 312, protein: 3.4, carbs: 41, fats: 15, category: "Fast Food" },
+            { name: "Hash Browns", calories: 326, protein: 2.7, carbs: 33, fats: 20, category: "Fast Food" },
+            { name: "Egg McMuffin", calories: 250, protein: 17, carbs: 27, fats: 8.7, category: "Fast Food" },
+            
+            // Fast Food - Chipotle
+            { name: "Chipotle Chicken Bowl (avg)", calories: 165, protein: 32, carbs: 4, fats: 7, category: "Fast Food" },
+            { name: "Chipotle Steak Bowl (avg)", calories: 150, protein: 21, carbs: 3, fats: 6, category: "Fast Food" },
+            { name: "Chipotle Carnitas", calories: 210, protein: 32, carbs: 0, fats: 12, category: "Fast Food" },
+            { name: "Chipotle White Rice", calories: 210, protein: 4, carbs: 40, fats: 4, category: "Fast Food" },
+            { name: "Chipotle Black Beans", calories: 120, protein: 8, carbs: 23, fats: 1, category: "Fast Food" },
+            { name: "Chipotle Guacamole", calories: 230, protein: 2, carbs: 8, fats: 22, category: "Fast Food" },
+            
+            // Fast Food - Subway
+            { name: "Subway Turkey Breast (6in)", calories: 280, protein: 18, carbs: 46, fats: 3.5, category: "Fast Food" },
+            { name: "Subway Italian BMT (6in)", calories: 410, protein: 19, carbs: 46, fats: 16, category: "Fast Food" },
+            { name: "Subway Meatball Sub (6in)", calories: 480, protein: 21, carbs: 61, fats: 18, category: "Fast Food" },
+            
+            // Fast Food - Pizza
+            { name: "Pizza (cheese)", calories: 266, protein: 11, carbs: 33, fats: 10, category: "Fast Food" },
+            { name: "Pizza (pepperoni)", calories: 298, protein: 12, carbs: 34, fats: 13, category: "Fast Food" },
+            { name: "Pizza (supreme)", calories: 264, protein: 11, carbs: 27, fats: 13, category: "Fast Food" },
+            
+            // Fast Food - Other
+            { name: "Taco (beef)", calories: 226, protein: 9.7, carbs: 18, fats: 13, category: "Fast Food" },
+            { name: "Burrito (beef & bean)", calories: 206, protein: 8.6, carbs: 25, fats: 7.7, category: "Fast Food" },
+            { name: "Hot Dog", calories: 290, protein: 10, carbs: 24, fats: 17, category: "Fast Food" },
+            { name: "Fried Chicken (breast)", calories: 246, protein: 25, carbs: 8.5, fats: 12, category: "Fast Food" },
+            
+            // Snacks
+            { name: "Potato Chips", calories: 536, protein: 6.6, carbs: 53, fats: 34, category: "Snacks" },
+            { name: "Pretzels", calories: 380, protein: 10, carbs: 79, fats: 3, category: "Snacks" },
+            { name: "Popcorn (air-popped)", calories: 387, protein: 13, carbs: 78, fats: 4.5, category: "Snacks" },
+            { name: "Popcorn (buttered)", calories: 500, protein: 9, carbs: 57, fats: 28, category: "Snacks" },
+            { name: "Crackers (saltine)", calories: 421, protein: 9, carbs: 71, fats: 11, category: "Snacks" },
+            { name: "Cheese Crackers", calories: 503, protein: 10, carbs: 58, fats: 25, category: "Snacks" },
+            { name: "Trail Mix", calories: 462, protein: 13, carbs: 45, fats: 29, category: "Snacks" },
+            { name: "Protein Bar", calories: 400, protein: 20, carbs: 44, fats: 15, category: "Snacks" },
+            { name: "Granola Bar", calories: 471, protein: 10, carbs: 64, fats: 20, category: "Snacks" },
+            { name: "Rice Cakes", calories: 387, protein: 8.2, carbs: 82, fats: 3.1, category: "Snacks" },
+            { name: "Beef Jerky", calories: 410, protein: 33, carbs: 11, fats: 25, category: "Snacks" },
+            { name: "String Cheese", calories: 318, protein: 25, carbs: 3.6, fats: 22, category: "Snacks" },
+            { name: "Hummus", calories: 166, protein: 7.9, carbs: 14, fats: 9.6, category: "Snacks" },
+            
+            // Desserts
+            { name: "Chocolate Chip Cookie", calories: 488, protein: 5.3, carbs: 68, fats: 23, category: "Desserts" },
+            { name: "Brownie", calories: 466, protein: 6, carbs: 63, fats: 23, category: "Desserts" },
+            { name: "Chocolate Cake", calories: 371, protein: 4.9, carbs: 50, fats: 17, category: "Desserts" },
+            { name: "Vanilla Cake", calories: 389, protein: 4.6, carbs: 58, fats: 16, category: "Desserts" },
+            { name: "Ice Cream (vanilla)", calories: 207, protein: 3.5, carbs: 24, fats: 11, category: "Desserts" },
+            { name: "Ice Cream (chocolate)", calories: 216, protein: 3.8, carbs: 28, fats: 11, category: "Desserts" },
+            { name: "Donut (glazed)", calories: 452, protein: 4.9, carbs: 51, fats: 25, category: "Desserts" },
+            { name: "Donut (chocolate)", calories: 424, protein: 4.5, carbs: 47, fats: 24, category: "Desserts" },
+            { name: "Candy Bar (Snickers)", calories: 488, protein: 9.3, carbs: 60, fats: 24, category: "Desserts" },
+            { name: "Candy Bar (Kit Kat)", calories: 518, protein: 6.9, carbs: 64, fats: 26, category: "Desserts" },
+            { name: "M&Ms", calories: 492, protein: 4.9, carbs: 70, fats: 21, category: "Desserts" },
+            { name: "Gummy Bears", calories: 325, protein: 6.9, carbs: 77, fats: 0, category: "Desserts" },
+            { name: "Oreos", calories: 480, protein: 4.7, carbs: 68, fats: 21, category: "Desserts" },
+            { name: "Cheesecake", calories: 321, protein: 5.5, carbs: 25, fats: 23, category: "Desserts" },
+            { name: "Apple Pie", calories: 237, protein: 2, carbs: 34, fats: 11, category: "Desserts" },
+            { name: "Chocolate (dark)", calories: 598, protein: 7.8, carbs: 46, fats: 43, category: "Desserts" },
+            { name: "Chocolate (milk)", calories: 535, protein: 7.6, carbs: 59, fats: 30, category: "Desserts" },
+            
+            // Beverages
+            { name: "Coca-Cola", calories: 42, protein: 0, carbs: 11, fats: 0, category: "Beverages" },
+            { name: "Orange Juice", calories: 45, protein: 0.7, carbs: 10, fats: 0.2, category: "Beverages" },
+            { name: "Apple Juice", calories: 46, protein: 0.1, carbs: 11, fats: 0.1, category: "Beverages" },
+            { name: "Coffee (black)", calories: 2, protein: 0.3, carbs: 0, fats: 0, category: "Beverages" },
+            { name: "Latte (whole milk)", calories: 61, protein: 3.2, carbs: 4.8, fats: 3.3, category: "Beverages" },
+            { name: "Cappuccino", calories: 38, protein: 2.1, carbs: 3.7, fats: 1.5, category: "Beverages" },
+            { name: "Beer (regular)", calories: 43, protein: 0.5, carbs: 3.6, fats: 0, category: "Beverages" },
+            { name: "Wine (red)", calories: 85, protein: 0.1, carbs: 2.6, fats: 0, category: "Beverages" },
+            { name: "Protein Shake (whey)", calories: 103, protein: 20, carbs: 3, fats: 1, category: "Beverages" },
+            { name: "Gatorade", calories: 26, protein: 0, carbs: 6.7, fats: 0, category: "Beverages" },
+            
+            // International - Mexican
+            { name: "Quesadilla (cheese)", calories: 234, protein: 10, carbs: 24, fats: 11, category: "Mexican" },
+            { name: "Enchilada", calories: 143, protein: 6.6, carbs: 12, fats: 7.9, category: "Mexican" },
+            { name: "Fajitas (chicken)", calories: 131, protein: 12, carbs: 6.7, fats: 6.2, category: "Mexican" },
+            { name: "Nachos", calories: 346, protein: 9.2, carbs: 36, fats: 19, category: "Mexican" },
+            { name: "Refried Beans", calories: 91, protein: 5.4, carbs: 15, fats: 1.2, category: "Mexican" },
+            { name: "Spanish Rice", calories: 150, protein: 3, carbs: 28, fats: 3, category: "Mexican" },
+            { name: "Salsa", calories: 36, protein: 1.5, carbs: 8.4, fats: 0.2, category: "Mexican" },
+            { name: "Guacamole", calories: 160, protein: 2, carbs: 9, fats: 15, category: "Mexican" },
+            
+            // International - Italian
+            { name: "Spaghetti with Meatballs", calories: 134, protein: 6.5, carbs: 15, fats: 5.3, category: "Italian" },
+            { name: "Lasagna", calories: 135, protein: 8, carbs: 11, fats: 6.5, category: "Italian" },
+            { name: "Fettuccine Alfredo", calories: 155, protein: 5, carbs: 16, fats: 8, category: "Italian" },
+            { name: "Ravioli (cheese)", calories: 175, protein: 6.6, carbs: 24, fats: 5.9, category: "Italian" },
+            { name: "Garlic Bread", calories: 350, protein: 9, carbs: 43, fats: 15, category: "Italian" },
+            { name: "Tiramisu", calories: 262, protein: 4.6, carbs: 30, fats: 14, category: "Italian" },
+            
+            // International - Asian
+            { name: "Fried Rice", calories: 163, protein: 3.7, carbs: 28, fats: 4.1, category: "Asian" },
+            { name: "Lo Mein", calories: 157, protein: 5.3, carbs: 25, fats: 4, category: "Asian" },
+            { name: "Pad Thai", calories: 153, protein: 5.6, carbs: 19, fats: 6.2, category: "Asian" },
+            { name: "Sushi (California Roll)", calories: 119, protein: 3.5, carbs: 18, fats: 3.6, category: "Asian" },
+            { name: "Sushi (Salmon)", calories: 142, protein: 6, carbs: 18, fats: 5.3, category: "Asian" },
+            { name: "Ramen (restaurant)", calories: 436, protein: 19, carbs: 65, fats: 11, category: "Asian" },
+            { name: "Orange Chicken", calories: 280, protein: 15, carbs: 28, fats: 12, category: "Asian" },
+            { name: "General Tso's Chicken", calories: 295, protein: 13, carbs: 35, fats: 11, category: "Asian" },
+            { name: "Spring Roll", calories: 138, protein: 3.5, carbs: 21, fats: 4.7, category: "Asian" },
+            { name: "Dumplings (pork)", calories: 210, protein: 8.5, carbs: 23, fats: 9, category: "Asian" },
+            { name: "Teriyaki Chicken", calories: 166, protein: 13, carbs: 13, fats: 7.4, category: "Asian" },
+            { name: "Pho (beef)", calories: 215, protein: 15, carbs: 25, fats: 5.5, category: "Asian" },
+            
+            // International - Indian
+            { name: "Chicken Tikka Masala", calories: 119, protein: 7.6, carbs: 5.8, fats: 7.2, category: "Indian" },
+            { name: "Butter Chicken", calories: 151, protein: 9.6, carbs: 5.3, fats: 10, category: "Indian" },
+            { name: "Naan Bread", calories: 262, protein: 7.6, carbs: 45, fats: 5.6, category: "Indian" },
+            { name: "Samosa", calories: 262, protein: 4.3, carbs: 28, fats: 15, category: "Indian" },
+            { name: "Biryani (chicken)", calories: 170, protein: 8, carbs: 22, fats: 5.5, category: "Indian" },
+            
+            // Common Meals
+            { name: "Grilled Chicken Salad", calories: 112, protein: 14, carbs: 4.5, fats: 4.5, category: "Meals" },
+            { name: "Caesar Salad", calories: 190, protein: 4.6, carbs: 7.3, fats: 16, category: "Meals" },
+            { name: "Cobb Salad", calories: 155, protein: 10, carbs: 4, fats: 11, category: "Meals" },
+            { name: "BLT Sandwich", calories: 267, protein: 10, carbs: 25, fats: 14, category: "Meals" },
+            { name: "Club Sandwich", calories: 245, protein: 14, carbs: 24, fats: 11, category: "Meals" },
+            { name: "Grilled Cheese", calories: 291, protein: 11, carbs: 28, fats: 15, category: "Meals" },
+            { name: "PB&J Sandwich", calories: 327, protein: 11, carbs: 46, fats: 12, category: "Meals" },
+            { name: "Chicken Noodle Soup", calories: 75, protein: 4, carbs: 9, fats: 2.5, category: "Meals" },
+            { name: "Tomato Soup", calories: 74, protein: 2, carbs: 16, fats: 0.6, category: "Meals" },
+            { name: "Chili (beef)", calories: 143, protein: 10, carbs: 13, fats: 5.8, category: "Meals" },
+            { name: "Mac and Cheese", calories: 164, protein: 6.4, carbs: 18, fats: 7.3, category: "Meals" },
+            { name: "Chicken Parmesan", calories: 197, protein: 16, carbs: 10, fats: 10, category: "Meals" },
+            { name: "Meatloaf", calories: 245, protein: 17, carbs: 9, fats: 16, category: "Meals" },
+            { name: "Pot Roast", calories: 201, protein: 20, carbs: 8, fats: 9.5, category: "Meals" },
+            { name: "Stir Fry (chicken & veg)", calories: 121, protein: 11, carbs: 9, fats: 4.8, category: "Meals" },
+            
+            // Chicken - More Varieties
+            { name: "Chicken Breast (grilled, seasoned)", calories: 165, protein: 31, carbs: 0, fats: 3.6, category: "Protein" },
+            { name: "Chicken Breast (baked)", calories: 165, protein: 31, carbs: 0, fats: 3.6, category: "Protein" },
+            { name: "Chicken Breast (rotisserie)", calories: 190, protein: 29, carbs: 0, fats: 7.4, category: "Protein" },
+            { name: "Chicken Tender (breaded)", calories: 220, protein: 17, carbs: 14, fats: 11, category: "Protein" },
+            { name: "Chicken Cutlet (breaded)", calories: 246, protein: 19, carbs: 15, fats: 12, category: "Protein" },
+            { name: "BBQ Chicken", calories: 176, protein: 26, carbs: 7, fats: 4.6, category: "Protein" },
+            { name: "Buffalo Chicken", calories: 180, protein: 24, carbs: 2, fats: 8, category: "Protein" },
+            { name: "Chicken Sausage", calories: 160, protein: 15, carbs: 3, fats: 9, category: "Protein" },
+            { name: "Chicken Nuggets (frozen)", calories: 296, protein: 15, carbs: 18, fats: 18, category: "Fast Food" },
+            
+            // Sandwiches & Wraps - Ready Made
+            { name: "Turkey & Cheese Sandwich", calories: 272, protein: 16, carbs: 26, fats: 11, category: "Sandwiches" },
+            { name: "Ham & Cheese Sandwich", calories: 290, protein: 17, carbs: 28, fats: 13, category: "Sandwiches" },
+            { name: "Tuna Salad Sandwich", calories: 287, protein: 13, carbs: 29, fats: 13, category: "Sandwiches" },
+            { name: "Chicken Salad Sandwich", calories: 322, protein: 14, carbs: 28, fats: 17, category: "Sandwiches" },
+            { name: "Egg Salad Sandwich", calories: 285, protein: 10, carbs: 28, fats: 15, category: "Sandwiches" },
+            { name: "Italian Sub", calories: 236, protein: 13, carbs: 24, fats: 10, category: "Sandwiches" },
+            { name: "Roast Beef Sandwich", calories: 245, protein: 19, carbs: 25, fats: 8, category: "Sandwiches" },
+            { name: "Chicken Caesar Wrap", calories: 209, protein: 12, carbs: 22, fats: 8.5, category: "Sandwiches" },
+            { name: "Turkey Wrap", calories: 200, protein: 14, carbs: 24, fats: 6, category: "Sandwiches" },
+            { name: "Veggie Wrap", calories: 178, protein: 6, carbs: 28, fats: 5.5, category: "Sandwiches" },
+            
+            // Frozen Meals - Popular Brands
+            { name: "Frozen Burrito (bean & cheese)", calories: 272, protein: 9, carbs: 43, fats: 7.5, category: "Frozen" },
+            { name: "Frozen Burrito (beef)", calories: 295, protein: 11, carbs: 41, fats: 9.8, category: "Frozen" },
+            { name: "Frozen Pizza (personal)", calories: 266, protein: 11, carbs: 33, fats: 10, category: "Frozen" },
+            { name: "Hot Pocket (pepperoni)", calories: 296, protein: 11, carbs: 36, fats: 12, category: "Frozen" },
+            { name: "Hot Pocket (ham & cheese)", calories: 287, protein: 12, carbs: 35, fats: 11, category: "Frozen" },
+            { name: "Lean Cuisine (chicken)", calories: 240, protein: 17, carbs: 30, fats: 6, category: "Frozen" },
+            { name: "Healthy Choice (turkey)", calories: 220, protein: 16, carbs: 28, fats: 5, category: "Frozen" },
+            { name: "Stouffer's Mac & Cheese", calories: 164, protein: 6.4, carbs: 18, fats: 7.3, category: "Frozen" },
+            { name: "Stouffer's Lasagna", calories: 135, protein: 8, carbs: 11, fats: 6.5, category: "Frozen" },
+            { name: "Frozen Chicken Alfredo", calories: 155, protein: 8, carbs: 16, fats: 6.5, category: "Frozen" },
+            { name: "Frozen Shrimp Scampi", calories: 138, protein: 10, carbs: 12, fats: 5.8, category: "Frozen" },
+            { name: "Frozen Salisbury Steak", calories: 186, protein: 14, carbs: 10, fats: 10, category: "Frozen" },
+            { name: "Frozen Meatloaf Dinner", calories: 245, protein: 17, carbs: 22, fats: 10, category: "Frozen" },
+            { name: "Frozen Pot Pie (chicken)", calories: 225, protein: 8, carbs: 23, fats: 11, category: "Frozen" },
+            { name: "Bagel Bites", calories: 236, protein: 9.4, carbs: 31, fats: 8.2, category: "Frozen" },
+            { name: "Pizza Rolls", calories: 222, protein: 7.8, carbs: 29, fats: 8.9, category: "Frozen" },
+            { name: "Frozen Corn Dogs", calories: 225, protein: 6.7, carbs: 25, fats: 10, category: "Frozen" },
+            { name: "Frozen Fish Sticks", calories: 277, protein: 11, carbs: 22, fats: 16, category: "Frozen" },
+            { name: "Frozen Popcorn Chicken", calories: 296, protein: 15, carbs: 18, fats: 18, category: "Frozen" },
+            
+            // Pasta Dishes - Prepared
+            { name: "Chicken Pesto Pasta", calories: 167, protein: 9, carbs: 18, fats: 6.5, category: "Pasta" },
+            { name: "Chicken Alfredo Pasta", calories: 155, protein: 8, carbs: 16, fats: 6.5, category: "Pasta" },
+            { name: "Shrimp Alfredo", calories: 138, protein: 10, carbs: 12, fats: 5.8, category: "Pasta" },
+            { name: "Spaghetti Bolognese", calories: 134, protein: 7, carbs: 15, fats: 5.5, category: "Pasta" },
+            { name: "Spaghetti Carbonara", calories: 166, protein: 7.8, carbs: 15, fats: 8.4, category: "Pasta" },
+            { name: "Penne Arrabbiata", calories: 131, protein: 4.2, carbs: 25, fats: 1.8, category: "Pasta" },
+            { name: "Penne Vodka", calories: 159, protein: 5.6, carbs: 20, fats: 6.2, category: "Pasta" },
+            { name: "Baked Ziti", calories: 148, protein: 7.5, carbs: 16, fats: 5.8, category: "Pasta" },
+            { name: "Stuffed Shells", calories: 142, protein: 7.2, carbs: 15, fats: 5.9, category: "Pasta" },
+            { name: "Tortellini (cheese)", calories: 200, protein: 8.5, carbs: 30, fats: 5.2, category: "Pasta" },
+            { name: "Macaroni Salad", calories: 192, protein: 3.6, carbs: 22, fats: 10, category: "Pasta" },
+            
+            // More International - Middle Eastern
+            { name: "Falafel", calories: 333, protein: 13, carbs: 32, fats: 18, category: "Middle Eastern" },
+            { name: "Shawarma (chicken)", calories: 165, protein: 18, carbs: 5, fats: 8, category: "Middle Eastern" },
+            { name: "Shawarma (beef)", calories: 215, protein: 16, carbs: 6, fats: 14, category: "Middle Eastern" },
+            { name: "Gyro (lamb)", calories: 217, protein: 11, carbs: 21, fats: 10, category: "Middle Eastern" },
+            { name: "Kebab (chicken)", calories: 165, protein: 25, carbs: 2, fats: 6, category: "Middle Eastern" },
+            { name: "Kebab (beef)", calories: 250, protein: 21, carbs: 2, fats: 18, category: "Middle Eastern" },
+            { name: "Tabbouleh", calories: 104, protein: 3, carbs: 16, fats: 3.8, category: "Middle Eastern" },
+            { name: "Baba Ganoush", calories: 96, protein: 2.4, carbs: 9.6, fats: 5.9, category: "Middle Eastern" },
+            { name: "Pita Bread", calories: 275, protein: 9, carbs: 56, fats: 1.2, category: "Middle Eastern" },
+            
+            // More International - Thai
+            { name: "Thai Green Curry", calories: 135, protein: 7, carbs: 12, fats: 7, category: "Thai" },
+            { name: "Thai Red Curry", calories: 142, protein: 8, carbs: 11, fats: 8, category: "Thai" },
+            { name: "Tom Yum Soup", calories: 87, protein: 9, carbs: 8, fats: 2.5, category: "Thai" },
+            { name: "Som Tam (papaya salad)", calories: 78, protein: 2.5, carbs: 16, fats: 0.5, category: "Thai" },
+            { name: "Massaman Curry", calories: 168, protein: 9, carbs: 14, fats: 9, category: "Thai" },
+            
+            // More International - Japanese
+            { name: "Chicken Teriyaki Bowl", calories: 166, protein: 13, carbs: 20, fats: 4, category: "Japanese" },
+            { name: "Beef Teriyaki Bowl", calories: 195, protein: 15, carbs: 22, fats: 6, category: "Japanese" },
+            { name: "Tempura (shrimp)", calories: 200, protein: 8, carbs: 20, fats: 10, category: "Japanese" },
+            { name: "Tempura (vegetable)", calories: 150, protein: 3, carbs: 22, fats: 6, category: "Japanese" },
+            { name: "Miso Soup", calories: 40, protein: 2.2, carbs: 5.4, fats: 1.2, category: "Japanese" },
+            { name: "Edamame", calories: 122, protein: 11, carbs: 10, fats: 5, category: "Japanese" },
+            { name: "Gyoza (pork)", calories: 210, protein: 8.5, carbs: 23, fats: 9, category: "Japanese" },
+            { name: "Yakisoba", calories: 155, protein: 5.5, carbs: 26, fats: 3.8, category: "Japanese" },
+            { name: "Udon Noodle Soup", calories: 115, protein: 4, carbs: 23, fats: 1, category: "Japanese" },
+            { name: "Katsu Curry", calories: 178, protein: 10, carbs: 20, fats: 7, category: "Japanese" },
+            
+            // More International - Korean
+            { name: "Bibimbap", calories: 156, protein: 8, carbs: 22, fats: 4.2, category: "Korean" },
+            { name: "Bulgogi (beef)", calories: 195, protein: 18, carbs: 10, fats: 9, category: "Korean" },
+            { name: "Korean Fried Chicken", calories: 280, protein: 16, carbs: 15, fats: 18, category: "Korean" },
+            { name: "Kimchi", calories: 15, protein: 1.1, carbs: 2.4, fats: 0.5, category: "Korean" },
+            { name: "Japchae (noodles)", calories: 143, protein: 3, carbs: 26, fats: 3.2, category: "Korean" },
+            
+            // More International - Vietnamese
+            { name: "Banh Mi Sandwich", calories: 350, protein: 15, carbs: 42, fats: 13, category: "Vietnamese" },
+            { name: "Vietnamese Spring Rolls", calories: 68, protein: 2.5, carbs: 12, fats: 1.5, category: "Vietnamese" },
+            { name: "Bun (vermicelli bowl)", calories: 145, protein: 10, carbs: 24, fats: 2, category: "Vietnamese" },
+            
+            // More International - Greek
+            { name: "Greek Salad", calories: 106, protein: 3.8, carbs: 7.2, fats: 7.5, category: "Greek" },
+            { name: "Gyro Platter", calories: 217, protein: 11, carbs: 21, fats: 10, category: "Greek" },
+            { name: "Spanakopita", calories: 259, protein: 9, carbs: 20, fats: 16, category: "Greek" },
+            { name: "Moussaka", calories: 176, protein: 9, carbs: 13, fats: 10, category: "Greek" },
+            { name: "Tzatziki", calories: 54, protein: 2, carbs: 3.6, fats: 3.8, category: "Greek" },
+            
+            // Deli/Prepared Foods
+            { name: "Rotisserie Chicken (dark meat)", calories: 205, protein: 27, carbs: 0, fats: 10, category: "Deli" },
+            { name: "Rotisserie Chicken (white meat)", calories: 142, protein: 27, carbs: 0, fats: 3, category: "Deli" },
+            { name: "Potato Salad", calories: 143, protein: 2.6, carbs: 13, fats: 9, category: "Deli" },
+            { name: "Coleslaw", calories: 83, protein: 0.9, carbs: 7.5, fats: 6.2, category: "Deli" },
+            { name: "Chicken Salad (deli)", calories: 200, protein: 10, carbs: 4, fats: 16, category: "Deli" },
+            { name: "Tuna Salad (deli)", calories: 187, protein: 16, carbs: 9.6, fats: 9.5, category: "Deli" },
+            { name: "Deviled Eggs", calories: 147, protein: 6.3, carbs: 0.6, fats: 13, category: "Deli" },
+            
+            // Breakfast Items - More Variety
+            { name: "Breakfast Burrito", calories: 262, protein: 12, carbs: 26, fats: 12, category: "Breakfast" },
+            { name: "Breakfast Sandwich", calories: 290, protein: 15, carbs: 28, fats: 13, category: "Breakfast" },
+            { name: "Sausage Egg & Cheese", calories: 441, protein: 20, carbs: 31, fats: 26, category: "Breakfast" },
+            { name: "Bacon Egg & Cheese", calories: 388, protein: 18, carbs: 30, fats: 21, category: "Breakfast" },
+            { name: "Breakfast Pizza", calories: 262, protein: 11, carbs: 28, fats: 12, category: "Breakfast" },
+            { name: "French Toast Sticks", calories: 310, protein: 6, carbs: 45, fats: 12, category: "Breakfast" },
+            { name: "Sausage Biscuit", calories: 415, protein: 10, carbs: 32, fats: 28, category: "Breakfast" },
+            { name: "Croissant (plain)", calories: 406, protein: 8.2, carbs: 46, fats: 21, category: "Breakfast" },
+            { name: "Croissant (chocolate)", calories: 414, protein: 7.4, carbs: 47, fats: 22, category: "Breakfast" },
+            { name: "Muffin (blueberry)", calories: 313, protein: 4.7, carbs: 54, fats: 8.5, category: "Breakfast" },
+            { name: "Muffin (chocolate chip)", calories: 425, protein: 5.3, carbs: 55, fats: 21, category: "Breakfast" },
+            { name: "Cinnamon Roll", calories: 420, protein: 6.5, carbs: 58, fats: 18, category: "Breakfast" },
+            { name: "Pop Tart", calories: 400, protein: 4, carbs: 70, fats: 11, category: "Breakfast" },
+            { name: "Toaster Strudel", calories: 370, protein: 4.5, carbs: 51, fats: 16, category: "Breakfast" },
+            
+            // Condiments & Sauces (per serving ~15g)
+            { name: "Ketchup", calories: 17, protein: 0.2, carbs: 4.5, fats: 0, category: "Condiments" },
+            { name: "Mustard", calories: 5, protein: 0.3, carbs: 0.5, fats: 0.3, category: "Condiments" },
+            { name: "Mayo", calories: 94, protein: 0.1, carbs: 0.1, fats: 10.3, category: "Condiments" },
+            { name: "Ranch Dressing", calories: 73, protein: 0.4, carbs: 1.4, fats: 7.7, category: "Condiments" },
+            { name: "Caesar Dressing", calories: 78, protein: 0.5, carbs: 0.5, fats: 8.5, category: "Condiments" },
+            { name: "Italian Dressing", calories: 43, protein: 0.1, carbs: 1.5, fats: 4.2, category: "Condiments" },
+            { name: "BBQ Sauce", calories: 29, protein: 0.3, carbs: 7, fats: 0.1, category: "Condiments" },
+            { name: "Hot Sauce", calories: 1, protein: 0.1, carbs: 0.1, fats: 0, category: "Condiments" },
+            { name: "Soy Sauce", calories: 8, protein: 1.3, carbs: 0.8, fats: 0, category: "Condiments" },
+            { name: "Teriyaki Sauce", calories: 16, protein: 0.6, carbs: 2.9, fats: 0, category: "Condiments" },
+            { name: "Pesto Sauce", calories: 80, protein: 2.5, carbs: 2, fats: 7.5, category: "Condiments" },
+            { name: "Marinara Sauce", calories: 24, protein: 0.8, carbs: 5, fats: 0.5, category: "Condiments" },
+            { name: "Alfredo Sauce", calories: 97, protein: 1.8, carbs: 3.2, fats: 9.2, category: "Condiments" },
         ];
 
         // Load data from localStorage
@@ -1148,10 +1932,10 @@
         }
 
         function switchTab(event, tabName) {
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-dock').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             
-            event.target.classList.add('active');
+            event.currentTarget.classList.add('active');
             document.getElementById(tabName).classList.add('active');
 
             if (tabName === 'stats') {
@@ -1161,6 +1945,33 @@
             } else if (tabName === 'calendar') {
                 renderCalendar();
             }
+        }
+
+        function magnifyTab(event) {
+            const tab = event.currentTarget;
+            const rect = tab.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const centerX = rect.width / 2;
+            const distance = Math.abs(x - centerX);
+            const maxDistance = rect.width / 2;
+            
+            // Calculate scale based on mouse position (closer to center = bigger)
+            const normalizedDistance = 1 - (distance / maxDistance);
+            const scaleBonus = normalizedDistance * 0.1; // Up to 10% extra scale
+            
+            const baseScale = tab.classList.contains('active') ? 1.05 : 1.0;
+            const hoverScale = 1.15 + scaleBonus;
+            const baseTranslateY = tab.classList.contains('active') ? -4 : 0;
+            
+            tab.style.transform = `translateY(${baseTranslateY - 8}px) scale(${hoverScale})`;
+        }
+
+        function resetTab(event) {
+            const tab = event.currentTarget;
+            const baseScale = tab.classList.contains('active') ? 1.05 : 1.0;
+            const baseTranslateY = tab.classList.contains('active') ? -4 : 0;
+            
+            tab.style.transform = `translateY(${baseTranslateY}px) scale(${baseScale})`;
         }
 
         function deleteFood(id) {
@@ -1222,6 +2033,113 @@
 
             updatePieChart(totals);
             updateBarChart(totals, goals);
+            updateBenchmarkComparison(totals);
+        }
+
+        function updateBenchmarkComparison(totals) {
+            const bodyStatsStr = localStorage.getItem('bodyStats');
+            if (!bodyStatsStr) {
+                document.getElementById('benchmarkContent').innerHTML = `
+                    <p style="font-size: 13px; color: #6c757d; text-align: center; padding: 20px;">
+                        Add your body stats in the Goals tab to see personalized comparisons
+                    </p>
+                `;
+                return;
+            }
+
+            const stats = JSON.parse(bodyStatsStr);
+            const weight = stats.currentWeight;
+            const age = stats.age;
+            const gender = stats.gender;
+
+            if (!weight || !age) {
+                document.getElementById('benchmarkContent').innerHTML = `
+                    <p style="font-size: 13px; color: #6c757d; text-align: center; padding: 20px;">
+                        Complete your age and weight in the Goals tab
+                    </p>
+                `;
+                return;
+            }
+
+            // Average recommendations for similar profile
+            const avgProtein = Math.round(weight * 0.8); // 0.8g per lb for average person
+            const avgCalories = gender === 'male' ? 2200 : 1800; // rough averages
+            const avgCarbs = Math.round((avgCalories * 0.45) / 4); // 45% of calories
+            const avgFats = Math.round((avgCalories * 0.30) / 9); // 30% of calories
+
+            const comparison = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div>
+                        <div style="font-size: 11px; color: #6c757d; margin-bottom: 4px;">YOUR INTAKE</div>
+                        <div style="font-size: 16px; font-weight: 600; color: #009b3a;">${Math.round(totals.calories)} cal</div>
+                        <div style="font-size: 12px; color: #495057;">P: ${Math.round(totals.protein)}g | C: ${Math.round(totals.carbs)}g | F: ${Math.round(totals.fats)}g</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 11px; color: #6c757d; margin-bottom: 4px;">AVERAGE ${gender.toUpperCase()}, ${age}Y, ${weight}LBS</div>
+                        <div style="font-size: 16px; font-weight: 600; color: #6c757d;">${avgCalories} cal</div>
+                        <div style="font-size: 12px; color: #495057;">P: ${avgProtein}g | C: ${avgCarbs}g | F: ${avgFats}g</div>
+                    </div>
+                </div>
+                <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #e9ecef;">
+                    <div style="font-size: 12px; color: #495057; margin-bottom: 4px;">
+                        <strong>Calories:</strong> 
+                        ${totals.calories > avgCalories + 200 ? 
+                            `<span style="color: #ffa500;">↑ ${Math.round(totals.calories - avgCalories)} above average</span>` :
+                            totals.calories < avgCalories - 200 ?
+                            `<span style="color: #009b3a;">↓ ${Math.round(avgCalories - totals.calories)} below average</span>` :
+                            `<span style="color: #009b3a;">✓ Within average range</span>`
+                        }
+                    </div>
+                    <div style="font-size: 12px; color: #495057;">
+                        <strong>Protein:</strong> 
+                        ${totals.protein > avgProtein + 20 ? 
+                            `<span style="color: #009b3a;">↑ Higher than average (good for muscle)</span>` :
+                            totals.protein < avgProtein - 20 ?
+                            `<span style="color: #ffa500;">↓ Lower than average</span>` :
+                            `<span style="color: #009b3a;">✓ Within average range</span>`
+                        }
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('benchmarkContent').innerHTML = comparison;
+        }
+
+        function toggleDietExamples() {
+            const element = document.getElementById('dietExamples');
+            element.style.display = element.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function applyDietTemplate(template) {
+            const templates = {
+                highprotein: { calories: 2500, protein: 200, carbs: 250, fats: 78 },
+                balanced: { calories: 2000, protein: 100, carbs: 250, fats: 67 },
+                lowcarb: { calories: 1800, protein: 135, carbs: 90, fats: 100 },
+                deficit: { calories: 1600, protein: 140, carbs: 160, fats: 44 },
+                leanbulk: { calories: 2800, protein: 175, carbs: 350, fats: 78 },
+                endurance: { calories: 3000, protein: 150, carbs: 450, fats: 67 }
+            };
+
+            const selected = templates[template];
+            if (!selected) return;
+
+            document.getElementById('goalCalories').value = selected.calories;
+            document.getElementById('goalProtein').value = selected.protein;
+            document.getElementById('goalCarbs').value = selected.carbs;
+            document.getElementById('goalFats').value = selected.fats;
+
+            saveGoals();
+
+            const names = {
+                highprotein: 'High Protein',
+                balanced: 'Balanced',
+                lowcarb: 'Low Carb',
+                deficit: 'Weight Loss',
+                leanbulk: 'Lean Bulk',
+                endurance: 'Endurance'
+            };
+
+            alert(`Applied "${names[template]}" diet template!\n\nCalories: ${selected.calories}\nProtein: ${selected.protein}g\nCarbs: ${selected.carbs}g\nFats: ${selected.fats}g`);
         }
 
         function updateGoalProgress() {
@@ -1304,6 +2222,550 @@
                     }
                 }
             });
+        }
+
+        // Settings Functions
+        function toggleSettings() {
+            const modal = document.getElementById('settingsModal');
+            modal.style.display = modal.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        function toggleDarkMode() {
+            const isDark = document.getElementById('darkModeToggle').checked;
+            document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        function loadSettings() {
+            // Load dark mode preference
+            const darkMode = localStorage.getItem('darkMode') === 'true';
+            document.getElementById('darkModeToggle').checked = darkMode;
+            if (darkMode) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+
+            // Load weight unit preference
+            const weightUnit = localStorage.getItem('weightUnit') || 'lbs';
+            document.getElementById('weightUnit').value = weightUnit;
+        }
+
+        function saveSettings() {
+            const weightUnit = document.getElementById('weightUnit').value;
+            localStorage.setItem('weightUnit', weightUnit);
+        }
+
+        function exportData() {
+            const data = {
+                foods: foodsByDate,
+                templates: mealTemplates,
+                goals: localStorage.getItem('nutritionGoals'),
+                bodyStats: localStorage.getItem('bodyStats'),
+                settings: {
+                    darkMode: localStorage.getItem('darkMode'),
+                    weightUnit: localStorage.getItem('weightUnit')
+                },
+                exportDate: new Date().toISOString()
+            };
+
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `elenia-backup-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            URL.revokeObjectURL(url);
+            alert('Data exported successfully!');
+        }
+
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = (event) => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        
+                        if (data.foods) {
+                            foodsByDate = data.foods;
+                            localStorage.setItem('nutritionDataByDate', JSON.stringify(foodsByDate));
+                        }
+                        if (data.templates) {
+                            mealTemplates = data.templates;
+                            localStorage.setItem('mealTemplates', JSON.stringify(mealTemplates));
+                        }
+                        if (data.goals) {
+                            localStorage.setItem('nutritionGoals', data.goals);
+                        }
+                        if (data.bodyStats) {
+                            localStorage.setItem('bodyStats', data.bodyStats);
+                        }
+                        if (data.settings) {
+                            if (data.settings.darkMode) localStorage.setItem('darkMode', data.settings.darkMode);
+                            if (data.settings.weightUnit) localStorage.setItem('weightUnit', data.settings.weightUnit);
+                        }
+                        
+                        alert('Data imported successfully! Reloading...');
+                        location.reload();
+                    } catch (error) {
+                        alert('Error importing data. Please check the file format.');
+                        console.error(error);
+                    }
+                };
+                
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+
+        function clearAllData() {
+            if (!confirm('Are you sure you want to delete ALL data? This cannot be undone!')) return;
+            if (!confirm('Really delete everything? This is your last warning!')) return;
+            
+            localStorage.clear();
+            alert('All data cleared. Reloading...');
+            location.reload();
+        }
+
+        // Meal Template Functions
+        function loadMealTemplates() {
+            const saved = localStorage.getItem('mealTemplates');
+            if (saved) {
+                mealTemplates = JSON.parse(saved);
+                renderMealTemplates();
+            }
+        }
+
+        function showCreateTemplate() {
+            document.getElementById('templateBuilder').style.display = 'block';
+            currentTemplateBuilder = [];
+            document.getElementById('templateName').value = '';
+            document.getElementById('templateFoodSearch').value = '';
+            document.getElementById('templateFoodsList').innerHTML = '<p style="font-size: 12px; color: #6c757d; text-align: center;">No foods added yet</p>';
+        }
+
+        function cancelTemplate() {
+            document.getElementById('templateBuilder').style.display = 'none';
+            currentTemplateBuilder = [];
+        }
+
+        function searchFoodForTemplate() {
+            const query = document.getElementById('templateFoodSearch').value.toLowerCase();
+            const resultsDiv = document.getElementById('templateSearchResults');
+            
+            if (query.length < 2) {
+                resultsDiv.style.display = 'none';
+                return;
+            }
+
+            const matches = foodDatabase.filter(food => 
+                food.name.toLowerCase().includes(query)
+            ).slice(0, 8);
+
+            if (matches.length === 0) {
+                resultsDiv.style.display = 'none';
+                return;
+            }
+
+            resultsDiv.style.display = 'block';
+            resultsDiv.innerHTML = matches.map(food => `
+                <div style="padding: 10px; border-bottom: 1px solid #e9ecef; cursor: pointer;" 
+                     onclick="selectTemplateFood('${food.name.replace(/'/g, "\\'")}')"
+                     onmouseover="this.style.background='#f8f9fa'" 
+                     onmouseout="this.style.background='white'">
+                    <div style="font-weight: 600; font-size: 13px;">${food.name}</div>
+                    <div style="font-size: 11px; color: #6c757d;">${food.calories} cal • P:${food.protein}g C:${food.carbs}g F:${food.fats}g</div>
+                </div>
+            `).join('');
+        }
+
+        function selectTemplateFood(foodName) {
+            const food = foodDatabase.find(f => f.name === foodName);
+            if (!food) return;
+
+            const portion = prompt(`How many grams of ${food.name}?`, '100');
+            if (!portion || portion <= 0) return;
+
+            const multiplier = parseFloat(portion) / 100;
+            
+            currentTemplateBuilder.push({
+                name: `${food.name} (${portion}g)`,
+                calories: food.calories * multiplier,
+                protein: food.protein * multiplier,
+                carbs: food.carbs * multiplier,
+                fats: food.fats * multiplier,
+                baseName: food.name,
+                portion: parseFloat(portion)
+            });
+
+            document.getElementById('templateSearchResults').style.display = 'none';
+            document.getElementById('templateFoodSearch').value = '';
+            renderTemplateBuilder();
+        }
+
+        function renderTemplateBuilder() {
+            const container = document.getElementById('templateFoodsList');
+            
+            if (currentTemplateBuilder.length === 0) {
+                container.innerHTML = '<p style="font-size: 12px; color: #6c757d; text-align: center;">No foods added yet</p>';
+                return;
+            }
+
+            const totals = currentTemplateBuilder.reduce((acc, item) => {
+                acc.calories += item.calories;
+                acc.protein += item.protein;
+                acc.carbs += item.carbs;
+                acc.fats += item.fats;
+                return acc;
+            }, {calories: 0, protein: 0, carbs: 0, fats: 0});
+
+            container.innerHTML = `
+                ${currentTemplateBuilder.map((item, idx) => `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #e9ecef;">
+                        <div>
+                            <div style="font-size: 13px; font-weight: 600;">${item.name}</div>
+                            <div style="font-size: 11px; color: #6c757d;">${Math.round(item.calories)} cal</div>
+                        </div>
+                        <button onclick="removeFromTemplateBuilder(${idx})" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;">×</button>
+                    </div>
+                `).join('')}
+                <div style="background: linear-gradient(135deg, #009b3a 0%, #ffd700 100%); color: white; padding: 10px; margin-top: 8px; border-radius: 6px; text-align: center;">
+                    <div style="font-size: 12px; opacity: 0.9;">Total</div>
+                    <div style="font-size: 14px; font-weight: 600;">${Math.round(totals.calories)} cal • P:${Math.round(totals.protein)}g C:${Math.round(totals.carbs)}g F:${Math.round(totals.fats)}g</div>
+                </div>
+            `;
+        }
+
+        function removeFromTemplateBuilder(idx) {
+            currentTemplateBuilder.splice(idx, 1);
+            renderTemplateBuilder();
+        }
+
+        function saveTemplate() {
+            const name = document.getElementById('templateName').value.trim();
+            const mealType = document.getElementById('templateMealType').value;
+
+            if (!name) {
+                alert('Please enter a template name');
+                return;
+            }
+
+            if (currentTemplateBuilder.length === 0) {
+                alert('Please add at least one food to the template');
+                return;
+            }
+
+            const template = {
+                id: Date.now(),
+                name: name,
+                mealType: mealType,
+                foods: currentTemplateBuilder,
+                created: new Date().toISOString()
+            };
+
+            mealTemplates.push(template);
+            localStorage.setItem('mealTemplates', JSON.stringify(mealTemplates));
+
+            renderMealTemplates();
+            cancelTemplate();
+            alert(`Template "${name}" saved!`);
+        }
+
+        function renderMealTemplates() {
+            const container = document.getElementById('mealTemplatesList');
+            
+            if (mealTemplates.length === 0) {
+                container.innerHTML = '<p style="font-size: 13px; color: #6c757d; text-align: center; padding: 20px;">No meal templates yet. Create one to get started!</p>';
+                document.getElementById('scheduleInterface').innerHTML = '<p style="font-size: 13px; color: #6c757d; text-align: center; padding: 20px;">Create a meal template first, then schedule it for specific days</p>';
+                return;
+            }
+
+            container.innerHTML = mealTemplates.map(template => {
+                const totals = template.foods.reduce((acc, item) => {
+                    acc.calories += item.calories;
+                    acc.protein += item.protein;
+                    return acc;
+                }, {calories: 0, protein: 0});
+
+                return `
+                    <div style="background: white; padding: 12px; border-radius: 8px; margin-bottom: 8px; border: 2px solid #e9ecef;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div>
+                                <h4 style="font-size: 14px; margin-bottom: 4px;">${template.name}</h4>
+                                <div style="font-size: 11px; color: #6c757d;">${template.mealType} • ${template.foods.length} items</div>
+                            </div>
+                            <button onclick="deleteTemplate(${template.id})" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;">Delete</button>
+                        </div>
+                        <div style="font-size: 12px; color: #495057; margin-bottom: 8px;">
+                            ${Math.round(totals.calories)} cal • ${Math.round(totals.protein)}g protein
+                        </div>
+                        <div style="display: flex; gap: 6px;">
+                            <button onclick="addTemplateToToday(${template.id})" style="flex: 1; background: #009b3a; color: white; border: none; padding: 6px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: 600;">Add to Today</button>
+                            <button onclick="scheduleTemplate(${template.id})" style="flex: 1; background: #ffd700; color: #333; border: none; padding: 6px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: 600;">Schedule</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            renderScheduleInterface();
+        }
+
+        function deleteTemplate(id) {
+            if (!confirm('Delete this template?')) return;
+            mealTemplates = mealTemplates.filter(t => t.id !== id);
+            localStorage.setItem('mealTemplates', JSON.stringify(mealTemplates));
+            renderMealTemplates();
+        }
+
+        function addTemplateToToday(id) {
+            const template = mealTemplates.find(t => t.id === id);
+            if (!template) return;
+
+            const todayKey = getTodayKey();
+            
+            template.foods.forEach(foodItem => {
+                foods.push({
+                    ...foodItem,
+                    id: Date.now() + Math.random()
+                });
+            });
+
+            saveData();
+            renderFoodList();
+            alert(`"${template.name}" added to today!`);
+        }
+
+        function scheduleTemplate(id) {
+            const template = mealTemplates.find(t => t.id === id);
+            if (!template) return;
+
+            const dateInput = prompt('Enter date to schedule (YYYY-MM-DD):', getTodayKey());
+            if (!dateInput) return;
+
+            // Validate date format
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(dateInput)) {
+                alert('Invalid date format. Use YYYY-MM-DD');
+                return;
+            }
+
+            if (!foodsByDate[dateInput]) {
+                foodsByDate[dateInput] = [];
+            }
+
+            template.foods.forEach(foodItem => {
+                foodsByDate[dateInput].push({
+                    ...foodItem,
+                    id: Date.now() + Math.random()
+                });
+            });
+
+            localStorage.setItem('nutritionDataByDate', JSON.stringify(foodsByDate));
+            alert(`"${template.name}" scheduled for ${dateInput}!`);
+        }
+
+        function renderScheduleInterface() {
+            const container = document.getElementById('scheduleInterface');
+            container.innerHTML = `
+                <p style="font-size: 13px; color: #495057; margin-bottom: 12px;">Click "Schedule" on any template above to add it to a specific date</p>
+                <div style="background: white; padding: 12px; border-radius: 8px;">
+                    <h4 style="font-size: 13px; margin-bottom: 8px;">Quick Actions:</h4>
+                    <p style="font-size: 12px; color: #6c757d; margin-bottom: 8px;">• <strong>Add to Today:</strong> Immediately adds template to today's log</p>
+                    <p style="font-size: 12px; color: #6c757d;">• <strong>Schedule:</strong> Choose a future date to pre-plan meals</p>
+                </div>
+            `;
+        }
+
+        // Photo Analysis Functions
+        async function analyzeFoodPhoto(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                document.getElementById('previewImage').src = e.target.result;
+                document.getElementById('photoPreview').style.display = 'block';
+                document.getElementById('analysisLoading').style.display = 'block';
+                document.getElementById('analysisResults').style.display = 'none';
+                
+                // Convert to base64
+                const base64Image = e.target.result.split(',')[1];
+                
+                try {
+                    // Call Claude API to analyze the food
+                    const response = await fetch('https://api.anthropic.com/v1/messages', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'anthropic-version': '2023-06-01'
+                        },
+                        body: JSON.stringify({
+                            model: 'claude-sonnet-4-20250514',
+                            max_tokens: 1000,
+                            messages: [{
+                                role: 'user',
+                                content: [
+                                    {
+                                        type: 'image',
+                                        source: {
+                                            type: 'base64',
+                                            media_type: file.type,
+                                            data: base64Image
+                                        }
+                                    },
+                                    {
+                                        type: 'text',
+                                        text: `Analyze this food photo and identify all visible food items with estimated portion sizes in grams. 
+                                        
+For each food item, provide:
+1. Food name (be specific, e.g., "grilled chicken breast" not just "chicken")
+2. Estimated portion size in grams
+3. Brief confidence note if uncertain
+
+Respond ONLY with valid JSON in this exact format (no markdown, no backticks):
+{
+  "foods": [
+    {"name": "food name", "grams": 150, "confidence": "high"},
+    {"name": "food name", "grams": 100, "confidence": "medium"}
+  ]
+}
+
+Be realistic with portions. A typical chicken breast is 150-200g, rice serving is 150-200g, etc.`
+                                    }
+                                ]
+                            }]
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.content && data.content[0] && data.content[0].text) {
+                        const resultText = data.content[0].text.trim();
+                        // Remove markdown code fences if present
+                        const cleanedText = resultText.replace(/```json\n?|\n?```/g, '').trim();
+                        const result = JSON.parse(cleanedText);
+                        
+                        displayDetectedFoods(result.foods);
+                    } else {
+                        throw new Error('Invalid response from API');
+                    }
+                    
+                } catch (error) {
+                    console.error('Error analyzing food:', error);
+                    document.getElementById('analysisLoading').style.display = 'none';
+                    alert('Error analyzing photo. Please try again or add foods manually.');
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function displayDetectedFoods(foods) {
+            document.getElementById('analysisLoading').style.display = 'none';
+            document.getElementById('analysisResults').style.display = 'block';
+            
+            detectedFoodsFromPhoto = foods;
+            
+            const container = document.getElementById('detectedFoods');
+            container.innerHTML = foods.map((food, index) => {
+                // Try to find matching food in database
+                const dbMatch = findBestMatch(food.name);
+                const matchInfo = dbMatch ? 
+                    `<div style="font-size: 11px; color: #009b3a; margin-top: 2px;">✓ Matched: ${dbMatch.name}</div>` :
+                    `<div style="font-size: 11px; color: #ffa500; margin-top: 2px;">⚠ Not in database - will estimate</div>`;
+                
+                return `
+                    <div style="background: white; padding: 10px; border-radius: 6px; margin-bottom: 8px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong style="font-size: 14px;">${food.name}</strong>
+                                <div style="font-size: 12px; color: #6c757d;">~${food.grams}g (${food.confidence} confidence)</div>
+                                ${matchInfo}
+                            </div>
+                            <button onclick="removeDetectedFood(${index})" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 12px; cursor: pointer;">✕</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function findBestMatch(foodName) {
+            const searchTerms = foodName.toLowerCase().split(' ');
+            
+            // Try exact match first
+            let match = foodDatabase.find(f => 
+                f.name.toLowerCase() === foodName.toLowerCase()
+            );
+            
+            if (match) return match;
+            
+            // Try partial matches
+            match = foodDatabase.find(f => {
+                const dbName = f.name.toLowerCase();
+                return searchTerms.every(term => dbName.includes(term));
+            });
+            
+            if (match) return match;
+            
+            // Try any keyword match
+            match = foodDatabase.find(f => {
+                const dbName = f.name.toLowerCase();
+                return searchTerms.some(term => dbName.includes(term) || term.includes(dbName.split(' ')[0]));
+            });
+            
+            return match;
+        }
+        
+        function removeDetectedFood(index) {
+            detectedFoodsFromPhoto.splice(index, 1);
+            displayDetectedFoods(detectedFoodsFromPhoto);
+        }
+        
+        function addDetectedFoods() {
+            if (detectedFoodsFromPhoto.length === 0) return;
+            
+            detectedFoodsFromPhoto.forEach(detectedFood => {
+                const dbMatch = findBestMatch(detectedFood.name);
+                
+                if (dbMatch) {
+                    // Use database nutrition, scaled to portion
+                    const multiplier = detectedFood.grams / 100;
+                    currentMeal.push({
+                        name: `${dbMatch.name} (${detectedFood.grams}g)`,
+                        calories: dbMatch.calories * multiplier,
+                        protein: dbMatch.protein * multiplier,
+                        carbs: dbMatch.carbs * multiplier,
+                        fats: dbMatch.fats * multiplier,
+                        id: Date.now() + Math.random()
+                    });
+                } else {
+                    // Estimate nutrition for unknown food
+                    // Use conservative estimates: ~150 cal/100g, balanced macros
+                    const multiplier = detectedFood.grams / 100;
+                    currentMeal.push({
+                        name: `${detectedFood.name} (${detectedFood.grams}g, estimated)`,
+                        calories: 150 * multiplier,
+                        protein: 8 * multiplier,
+                        carbs: 20 * multiplier,
+                        fats: 5 * multiplier,
+                        id: Date.now() + Math.random()
+                    });
+                }
+            });
+            
+            updateMealBuilder();
+            
+            // Clear photo analysis
+            document.getElementById('photoPreview').style.display = 'none';
+            document.getElementById('foodPhoto').value = '';
+            detectedFoodsFromPhoto = [];
         }
 
         // Meal Builder Functions
@@ -1674,12 +3136,14 @@
 
         // Initialize
         console.log('Initializing app...');
+        loadSettings();
         loadData();
+        loadMealTemplates();
         console.log('Data loaded. Foods for today:', foods.length);
         renderFoodList();
         console.log('=== Elenia Ready ===');
     </script>
-<script>
+    <script>
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js");
 }
